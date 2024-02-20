@@ -1,5 +1,14 @@
 use bevy::prelude::*;
 
+pub struct HelloPlugin;
+
+impl Plugin for HelloPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, add_people)
+            .add_systems(Update, (hello_world, greet_people));
+    }
+}
+
 #[derive(Component)]
 struct Person;
 
@@ -32,9 +41,5 @@ fn update_people(mut query: Query<&mut Name, With<Person>>) {
 }
 
 fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins)
-        .add_systems(Startup, add_people)
-        .add_systems(Update, (hello_world, (update_people, greet_people).chain()))
-        .run();
+    App::new().add_plugins((DefaultPlugins, HelloPlugin)).run();
 }
